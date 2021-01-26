@@ -1,0 +1,13 @@
+.header-container {
+	margin-left: 17.5%;
+	margin-right: 17.5%;
+	width: 65%;
+	display: flex;
+	height: 100px;
+}
+
+.header-logo {
+	font-family: var(--font);
+}
+.header-search {
+}
