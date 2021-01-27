@@ -3,31 +3,27 @@ import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination'
 import './List.css'
 
-const key = process.env.REACT_APP_API_KEY
-
-const List = () => {
+const List = ({ API_key }) => {
   const [list, setList] = useState([])
   const [page, setPage] = useState(0)
   const [pageLength, setPageLength] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const handleData = async () => {
-      await axios.get(`https://api.nomics.com/v1/currencies/ticker?key=${key}`)
+      await axios.get(`https://api.nomics.com/v1/currencies/ticker?key=${API_key}`)
         .then((response) => {
           setList(response.data)
           setPageLength(Math.round(response.data.length / 100))
-          console.log(response.data[0])
-          console.log(response.data[0]['1d'].volume)
+          setLoading(false)
         })
     }
-
     handleData()
   }, [])
 
   const handlePageClick = (event) => {
     setPage((Number(event.target.innerText) - 1) * 100)
   }
-
 
   const listItem =
     list.slice(page, page + 100).map((item, index) => {
@@ -66,41 +62,47 @@ const List = () => {
       )
     })
 
-  return (<div className="list--container">
-    <div className="list--title__container">
-      <div className="list--item__index">
-        #
-        </div>
-      <div className="list--title__name">
-        Name
-        </div>
-      <div className="list--title__desc">
-        <div className="list--title__price">
-          Price
-          </div>
-        <div className="list--title__price">
-          24H
-          </div>
-        <div className="list--title__price">
-          7D
-          </div>
-        <div className="list--title__market">
-          Market Cap
-          </div>
-        <div className="list--title__market">
-          Volumn
-          </div>
-        <div className="list--title__supply">
-          Circulating Supply
-          </div>
+  return loading ?
+    <div className="loader--container">
+      <div className="loader">
       </div>
     </div>
-    {listItem}
-    <div className="list--pagination">
-      <Pagination onClick={(event) => handlePageClick(event)} count={pageLength} />
+    :
+
+    <div className="list--container">
+      <div className="list--title__container">
+        <div className="list--item__index">
+          #
+        </div>
+        <div className="list--title__name">
+          Name
+        </div>
+        <div className="list--title__desc">
+          <div className="list--title__price">
+            Price
+          </div>
+          <div className="list--title__price">
+            24H
+          </div>
+          <div className="list--title__price">
+            7D
+          </div>
+          <div className="list--title__market">
+            Market Cap
+          </div>
+          <div className="list--title__market">
+            Volumn
+          </div>
+          <div className="list--title__supply">
+            Circulating Supply
+          </div>
+        </div>
+      </div>
+      {listItem}
+      <div className="list--pagination">
+        <Pagination onClick={(event) => handlePageClick(event)} count={pageLength} />
+      </div>
     </div>
-  </div>
-  )
 }
 
 export default List

@@ -7,7 +7,7 @@ const Header = () => {
       RP Crypto
     </div>
     <div className="header-search">
-      <input />
+      <i className='bx bx-search-alt'></i>
     </div>
   </div>
 }
