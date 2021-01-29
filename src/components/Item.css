@@ -1,11 +1,13 @@
 .item--title__container {
 	display: flex;
-	padding-left: 17.5%;
-	padding-right: 17.5%;
+	padding-left: 15%;
+	padding-right: 15%;
 	width: 100%;
 	height: 150px;
 	background-color: rgb(252, 252, 252);
 	align-items: center;
+	border-top: 1px solid rgb(230, 230, 230);
+	border-bottom: 1px solid rgb(230, 230, 230);
 }
 
 .item--title__image {
@@ -77,4 +79,55 @@
 	font-size: 16px;
 	border-radius: 5px;
 	margin-top: 3px;
+}
+
+.item--percentage__negative {
+	background-color: #ea3943;
+	padding: 5px 10px;
+	color: white;
+	width: fit-content;
+	margin-left: auto;
+	font-size: 16px;
+	border-radius: 5px;
+	margin-top: 3px;
+}
+
+.chart--container {
+	margin-left: 15%;
+	margin-right: 15%;
+	display: flex;
+	width: 70%;
+}
+
+.chart--info {
+	width: 25%;
+	height: 300px;
+	margin-left: auto;
+}
+
+.chart {
+	width: 70%;
+}
+
+.stat--title__container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 75px;
+	background-color: rgb(245, 245, 245);
+	border-radius: 10px;
+}
+
+.stat--name__symbol {
+	width: 70%;
+	margin-left: 20px;
+}
+
+.stat--symbol {
+	font-size: 13px;
+	color: grey;
+}
+
+.stat--name {
+	font-size: 20px;
 }
