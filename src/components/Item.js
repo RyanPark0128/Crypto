@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Line } from 'react-chartjs-2'
+import { useParams } from 'react-router-dom'
 import './Item.css'
 
 const Item = ({ API_key }) => {
@@ -14,6 +15,7 @@ const Item = ({ API_key }) => {
   const [chartType, setChartType] = useState('exchange-rates')
   const [period, setPeriod] = useState('3650')
   const [labelHistory, setLabelHistory] = useState([])
+  let { id } = useParams();
 
   const lineData = {
     labels: labelHistory,
@@ -51,9 +53,9 @@ const Item = ({ API_key }) => {
   useEffect(() => {
     const fetchHistory = async () => {
       const date = new Date(new Date().getTime() - (Number(period) * 24 * 60 * 60 * 1000)).toISOString()
-      console.log(date)
-      await axios.get(`https://api.nomics.com/v1/${chartType}/history?key=${API_key}&currency=BTC&start=${date}`)
+      await axios.get(`https://api.nomics.com/v1/${chartType}/history?key=${API_key}&currency=${id}&start=${date}`)
         .then((response) => {
+          console.log(response.data)
           setLabelHistory(response.data.map((item) => {
             return item[Object.keys(item)[0]]
           }))
@@ -69,7 +71,7 @@ const Item = ({ API_key }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(`https://api.nomics.com/v1/currencies/ticker?key=${API_key}&ids=BTC&interval=1d,7d,30d&convert=EUR&per-page=100&page=1`)
+      await axios.get(`https://api.nomics.com/v1/currencies/ticker?key=${API_key}&ids=${id}&interval=1d,7d,30d&convert=EUR&per-page=100&page=1`)
         .then((response) => {
           setData(response.data[0])
           setPriceChange(Number(response.data[0]['1d'].price_change_pct * 100).toFixed(2))
@@ -89,8 +91,8 @@ const Item = ({ API_key }) => {
       <div className="item--title__container">
         <div className="item--info__container">
           <div className="item--info__row">
-            <div className="item--title__image">
-              <img src={data.logo_url} />
+            <div>
+              <img className="item--title__image" src={data.logo_url} />
             </div>
             <div className="item--title__name">
               {data.name}
@@ -190,8 +192,8 @@ const Item = ({ API_key }) => {
           </div>
           <div className="chart--info">
             <div className="stat--title__container">
-              <div className="item--title__image">
-                <img src={data.logo_url} />
+              <div>
+                <img className="item--title__image" src={data.logo_url} />
               </div>
               <div className="stat--name__symbol">
                 <div className="stat--symbol">

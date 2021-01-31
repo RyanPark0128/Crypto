@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Pagination from '@material-ui/lab/Pagination'
+import { useHistory } from "react-router-dom";
 import './List.css'
 
 const List = ({ API_key }) => {
@@ -8,6 +9,7 @@ const List = ({ API_key }) => {
   const [page, setPage] = useState(0)
   const [pageLength, setPageLength] = useState(0)
   const [loading, setLoading] = useState(true)
+  let history = useHistory()
 
   useEffect(() => {
     const handleData = async () => {
@@ -27,9 +29,9 @@ const List = ({ API_key }) => {
 
   const listItem =
     list.slice(page, page + 100).map((item, index) => {
-      return (<div key={item.id} className="list--item__container">
+      return (<div key={item.id} onClick={() => history.push(`/item/${item.symbol}`)} className="list--item__container">
         <div className="list--item__index">
-          {index + 1}
+          {page + index + 1}
         </div>
         <img className="list--image" src={item.logo_url} alt="logo" />
         <div className="list--name">
@@ -42,17 +44,8 @@ const List = ({ API_key }) => {
           <div className="list--desc__price">
             ${Number(item.price).toFixed(2)}
           </div>
-          <div className="list--desc__price">
-            {Number(item['1d'].price_change_pct * 100).toFixed(2)}%
-          </div>
-          <div className="list--desc__price">
-            {Number(item['7d'].price_change_pct * 100).toFixed(2)}%
-          </div>
           <div className="list--desc__market">
             ${Number(item.market_cap).toFixed(2)}
-          </div>
-          <div className="list--desc__market">
-            ${item['1d'].volume}
           </div>
           <div className="list--desc__supply">
             {item.circulating_supply} {item.symbol}
@@ -68,7 +61,6 @@ const List = ({ API_key }) => {
       </div>
     </div>
     :
-
     <div className="list--container">
       <div className="list--title__container">
         <div className="list--item__index">
@@ -81,17 +73,8 @@ const List = ({ API_key }) => {
           <div className="list--title__price">
             Price
           </div>
-          <div className="list--title__price">
-            24H
-          </div>
-          <div className="list--title__price">
-            7D
-          </div>
           <div className="list--title__market">
             Market Cap
-          </div>
-          <div className="list--title__market">
-            Volumn
           </div>
           <div className="list--title__supply">
             Circulating Supply
@@ -100,7 +83,7 @@ const List = ({ API_key }) => {
       </div>
       {listItem}
       <div className="list--pagination">
-        <Pagination onClick={(event) => handlePageClick(event)} count={pageLength} />
+        <Pagination onChange={(e) => handlePageClick(e)} count={pageLength} />
       </div>
     </div>
 }
