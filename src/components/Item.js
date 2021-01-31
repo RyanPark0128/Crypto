@@ -12,7 +12,7 @@ const Item = ({ API_key }) => {
   const [volumeChange, setVolumeChange] = useState('')
   const [dataHistory, setDataHistory] = useState([])
   const [chartType, setChartType] = useState('exchange-rates')
-  const [period, setPeriod] = useState("")
+  const [period, setPeriod] = useState('3650')
   const [labelHistory, setLabelHistory] = useState([])
 
   const lineData = {
@@ -47,15 +47,18 @@ const Item = ({ API_key }) => {
       }]
     }
   }
+
   useEffect(() => {
     const fetchHistory = async () => {
-      await axios.get(`https://api.nomics.com/v1/${chartType}/history?key=${API_key}&currency=BTC&start=2018-04-14T00%3A00%3A00Z&`)
+      const date = new Date(new Date().getTime() - (Number(period) * 24 * 60 * 60 * 1000)).toISOString()
+      console.log(date)
+      await axios.get(`https://api.nomics.com/v1/${chartType}/history?key=${API_key}&currency=BTC&start=${date}`)
         .then((response) => {
           setLabelHistory(response.data.map((item) => {
             return item[Object.keys(item)[0]]
           }))
           setDataHistory(response.data.map((item) => {
-            return item[Object.keys(item)[1]]
+            return Number(item[Object.keys(item)[1]]).toFixed(2)
           }))
         })
     }
@@ -163,22 +166,22 @@ const Item = ({ API_key }) => {
           </button>
               </div>
               <div className="chart--buttons__row2">
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('1')} className={period === '1' ? 'chart--button__selected' : 'chart--button'}>
                   Day
           </button>
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('7')} className={period === '7' ? 'chart--button__selected' : 'chart--button'}>
                   Week
             </button>
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('30')} className={period === '30' ? 'chart--button__selected' : 'chart--button'}>
                   Month
             </button>
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('90')} className={period === '90' ? 'chart--button__selected' : 'chart--button'}>
                   3 Months
             </button>
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('365')} className={period === '365' ? 'chart--button__selected' : 'chart--button'}>
                   Year
             </button>
-                <button className={period === 'volume' ? 'chart--button__selected' : 'chart--button'}>
+                <button onClick={() => setPeriod('3650')} className={period === '3650' ? 'chart--button__selected' : 'chart--button'}>
                   All
             </button>
               </div>
